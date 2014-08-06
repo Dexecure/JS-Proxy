@@ -1,0 +1,37 @@
+{
+  "name": "js-proxy",
+  "description": "A multithreaded man-in-the-middle proxy to extract JavaScript from websites and modify it on the fly",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://Inian@bitbucket.org/dexterjs/js-proxy.git"
+  },
+  "main": "proxy.js",
+  "keywords": [
+    "man-in-the-middle",
+    "proxy",
+    "esprima"
+  ],
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "dependencies": {
+    "http-proxy": "0.10.4",
+    "falafel-turbo": "*",
+    "cheerio": "*"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Inian Parameshwaran",
+    "email": "inian1234@gmail.com",
+    "url": "http://inian.co"
+  },
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://bitbucket.org/dexterjs/js-proxy/issues"
+  }
+}
