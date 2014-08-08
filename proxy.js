@@ -1,34 +1,42 @@
-var start = function(options) {
-    var httpProxy = require('http-proxy');
-    var url = require('url');
-    var path = require("path");
-    var instrument = require(path.join(__dirname, './instrument.js'));
-    var instrument_html = require(path.join(__dirname, './instrument_html.js'));
-    var zlib = require('zlib');
-    var port = parseInt(options.port);
+var start = function (options) {
+    var i,
+        httpProxy = require('http-proxy'),
+        url = require('url'),
+        path = require("path"),
+        instrument = require(path.join(__dirname, './instrument.js')),
+        instrument_html = require(path.join(__dirname, './instrument_html.js')),
+        zlib = require('zlib'),
+        port = parseInt(options.port, 10),
+        cluster = require('cluster'),
+        threads = parseInt(options.threads, 10);
 
-    var cluster = require('cluster');
-    var threads = parseInt(options.threads);
-    if (!threads)
+    if (!threads) {
         threads = 1;
+    }
+
     if (cluster.isMaster) {
         for (i = 0; i < threads; i++) {
             cluster.fork();
         }
     } else {
-        httpProxy.createServer(function(req, res, next) {
+        httpProxy.createServer(function (req, res, next) {
 
-            var _writeHead = res.writeHead;
-            var _process = false;
-            var _isJS = false;
-            var _isHTML = false;
-            var _code, _headers, _contentType;
-            var _content;
+            var _writeHead = res.writeHead,
+                _process = false,
+                _isJS = false,
+                _isHTML = false,
+                _code,
+                _headers,
+                _contentType,
+                _content,
+                _write = res.write,
+                _end = res.end,
+                processedContent = '';
 
             delete req.headers['accept-encoding'];
 
-            res.writeHead = function() {
-                _code = arguments[0] + '';
+            res.writeHead = function (code) {
+                _code = code.toString();
                 _headers = this._headers;
                 if (this.getHeader('content-type')) {
                     _contentType = this.getHeader('content-type');
@@ -48,8 +56,8 @@ var start = function(options) {
                     _writeHead.apply(res, arguments);
                 }
             };
-            var _write = res.write;
-            res.write = function(data) {
+
+            res.write = function (data) {
                 if (_process) {
                     _content = Buffer.concat([_content, data]);
                 } else {
@@ -57,8 +65,22 @@ var start = function(options) {
                 }
             };
 
-            var _end = res.end;
-            res.end = function() {
+            res.end = function () {
+
+                function _instrumentJS(str, options) {
+                    return instrument.instrument(str, options).toString();
+                }
+
+                function _instrumentHTML(str, options) {
+                    return instrument_html.instrument_html(str, options);
+                }
+
+                function finish() {
+                    _headers['content-length'] = Buffer.byteLength(processedContent, 'utf8');
+                    _writeHead.call(res, _code, _headers);
+                    _write.call(res, processedContent);
+                    _end.apply(res, arguments);
+                }
 
                 function callback(err, buffer) {
                     if (!err) {
@@ -76,15 +98,7 @@ var start = function(options) {
                     }
                 }
 
-                function finish() {
-                    _headers['content-length'] = Buffer.byteLength(processedContent, 'utf8');
-                    _writeHead.call(res, _code, _headers);
-                    _write.call(res, processedContent);
-                    _end.apply(res, arguments);
-                }
-
                 if (_process) {
-                    var processedContent = '';
                     if (this.getHeader("Content-Encoding") === "gzip") {
                         zlib.unzip(_content, callback);
                     } else if (this.getHeader("Content-Encoding") === "deflate") {
@@ -94,8 +108,6 @@ var start = function(options) {
                             processedContent = _instrumentJS(_content.toString(), options);
                         } else if (_isHTML) {
                             processedContent = _instrumentHTML(_content.toString(), options);
-                        } else {
-                            processedContent = buffer.toString();
                         }
                         finish();
                     }
@@ -104,29 +116,21 @@ var start = function(options) {
                 }
             };
             next();
-        }, function(req, res) {
-            var proxy = new httpProxy.RoutingProxy();
-            var buffer = httpProxy.buffer(req);
-            var urlObj = url.parse(req.url);
+        }, function (req, res) {
+            var proxy = new httpProxy.RoutingProxy(),
+                buffer = httpProxy.buffer(req),
+                urlObj = url.parse(req.url);
             req.headers.host = urlObj.host;
             req.url = urlObj.path;
             proxy.proxyRequest(req, res, {
                 host: urlObj.hostname,
-                port: urlObj.port ? urlObj.port : 80,
+                port: urlObj.port || 80,
                 buffer: buffer
             });
-        }).listen(port, function() {
+        }).listen(port, function () {
             console.log("Waiting for requests...");
         });
 
-    }
-
-    function _instrumentJS(str, options) {
-        return instrument.instrument(str, options).toString();
-    }
-
-    function _instrumentHTML(str, options) {
-        return instrument_html.instrument_html(str, options);
     }
 };
 
