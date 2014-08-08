@@ -5,6 +5,7 @@ var start = function(options) {
     var instrument = require(path.join(__dirname, './instrument.js'));
     var instrument_html = require(path.join(__dirname, './instrument_html.js'));
     var zlib = require('zlib');
+    var port = parseInt(options.port);
 
     var cluster = require('cluster');
     var threads = process.argv.slice(2)[0];
@@ -114,7 +115,7 @@ var start = function(options) {
                 port: urlObj.port ? urlObj.port : 80,
                 buffer: buffer
             });
-        }).listen(9003, function() {
+        }).listen(port, function() {
             console.log("Waiting for requests...");
         });
 
