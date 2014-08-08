@@ -17,7 +17,7 @@ var instrument = function instrument(input, options) {
         output2 = options.postprocess(output2, options);
     }
 
-    if(output2 == undefined) {
+    if (output2 === undefined) {
         //parse error
         return input;
     }
