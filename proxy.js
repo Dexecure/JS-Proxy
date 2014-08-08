@@ -67,22 +67,22 @@ var start = function (options) {
 
             res.end = function () {
 
-                function _instrumentJS(str, options) {
+                var _instrumentJS = function (str, options) {
                     return instrument.instrument(str, options).toString();
-                }
+                };
 
-                function _instrumentHTML(str, options) {
+                var _instrumentHTML = function (str, options) {
                     return instrument_html.instrument_html(str, options);
-                }
+                };
 
-                function finish() {
+                var finish = function () {
                     _headers['content-length'] = Buffer.byteLength(processedContent, 'utf8');
                     _writeHead.call(res, _code, _headers);
                     _write.call(res, processedContent);
                     _end.apply(res, arguments);
-                }
+                };
 
-                function callback(err, buffer) {
+                var callback = function (err, buffer) {
                     if (!err) {
                         res.removeHeader("Content-Encoding");
                         if (_isJS) {
@@ -96,7 +96,7 @@ var start = function (options) {
                     } else {
                         console.log("gzip/deflate error " + err.message);
                     }
-                }
+                };
 
                 if (_process) {
                     if (this.getHeader("Content-Encoding") === "gzip") {
