@@ -1,7 +1,7 @@
 {
   "name": "js-proxy",
   "description": "A multithreaded man-in-the-middle proxy to extract JavaScript from websites and modify it on the fly",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "https://Inian@bitbucket.org/dexterjs/js-proxy.git"
