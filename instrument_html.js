@@ -15,7 +15,7 @@ function instrument_html(str, options) {
 
     }
     //second checking if its JS
-    var checking = instrument.instrument(str).toString();
+    var checking = instrument.instrument(str, options).toString();
     var $;
     if (checking == str) {
         $ = cheerio.load(str, {
@@ -26,8 +26,6 @@ function instrument_html(str, options) {
         return checking.toString();
     }
     // $.root().find('body').prepend("<script src='//128.199.221.233/customVarsIni.js'></script><script src='//128.199.221.233/stringIni.js'></script>");
-    var options = {};
-    options.count = 0;
     $('script').each(function(index, elem) {
         var type = $(this).attr('type');
         var src = $(this).attr('src');
@@ -54,10 +52,7 @@ function instrument_html(str, options) {
                 return;
             }
             text = text.trim();
-            text = instrument.instrument(text, {
-                addCustomFunctions: false,
-                beautify: false
-            }).toString();
+            text = instrument.instrument(text, options).toString();
             text = text.substring(prepend.length, text.lastIndexOf("}"));
             $(this).attr(eventAttributes[i], text);
         });

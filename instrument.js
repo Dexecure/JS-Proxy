@@ -9,17 +9,18 @@ var instrument = function instrument(input, options) {
 
     var output2 = falafel(input, {
         'range': true
-    }, function(node) {
-        var i;
-        for (i = 0; i < options.modules.length; i++) {
-            require(options.modules[i])(node, options);
-        }
+    }, function (node) {
+        options.instrument(node);
     });
 
     if (options.postprocess) {
         output2 = postprocess(output2, options);
     }
 
+    if(output2 == undefined) {
+        //parse error
+        return input;
+    }
     return output2.toString();
 };
 
