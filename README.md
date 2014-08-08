@@ -14,6 +14,7 @@ var proxy = require('js-proxy');
 
 var options = {};
 options.port = 9003;
+options.threads = 3;
 options.preprocess = function(input){
      // add in your preprocessing logic here
      return input;

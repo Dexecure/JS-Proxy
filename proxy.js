@@ -8,7 +8,7 @@ var start = function(options) {
     var port = parseInt(options.port);
 
     var cluster = require('cluster');
-    var threads = process.argv.slice(2)[0];
+    var threads = parseInt(options.threads);
     if (!threads)
         threads = 1;
     if (cluster.isMaster) {
