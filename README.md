@@ -6,11 +6,14 @@ The callback function is called for each node returned by [falafel](https://gith
 
     var proxy = require('js-proxy');
     var options = {};
-    options.preprocess = function(){
+    options.port = 9003;
+    options.preprocess = function(input){
 	 // add in your preprocessing logic here
+        return input;
      };
-    options.postprocess = function(){
+    options.postprocess = function(input){
 	 // add in your postprocessing logic here
+        return input;
     };
     options.instrument = function(node) {
 	    if(node.type == "Program") {
