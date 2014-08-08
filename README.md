@@ -1,6 +1,6 @@
 #JS-Proxy
 
-A man-in-the-middle proxy which captures JavaScript on the fly and lets you modify it using a callback. 
+A multithreaded man-in-the-middle proxy which captures JavaScript on the fly and lets you modify it using a callback. 
 
 ##Installation
 ```
