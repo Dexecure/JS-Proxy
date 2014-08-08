@@ -4,7 +4,7 @@ var instrument = function instrument(input, options) {
 
     options = options || {};
     if (options.preprocess) {
-        input = preprocess(input, options);
+        input = options.preprocess(input, options);
     }
 
     var output2 = falafel(input, {
@@ -14,7 +14,7 @@ var instrument = function instrument(input, options) {
     });
 
     if (options.postprocess) {
-        output2 = postprocess(output2, options);
+        output2 = options.postprocess(output2, options);
     }
 
     if(output2 == undefined) {
