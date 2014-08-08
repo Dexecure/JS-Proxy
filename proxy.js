@@ -6,7 +6,6 @@ var start = function(options) {
     var instrument_html = require(path.join(__dirname, './instrument_html.js'));
     var zlib = require('zlib');
 
-    var esprima = require('falafel/node_modules/esprima').parse;
     var cluster = require('cluster');
     var threads = process.argv.slice(2)[0];
     if (!threads)
