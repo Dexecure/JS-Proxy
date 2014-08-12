@@ -1,11 +1,11 @@
 {
   "name": "js-proxy",
   "description": "A multithreaded man-in-the-middle proxy to extract JavaScript from websites and modify it on the fly",
-  "version": "0.0.5",
-  "homepage": "https://bitbucket.org/dexterjs/js-proxy/",
+  "version": "0.0.6",
+  "homepage": "https://github.com/Dexter-JS/JS-Proxy",
   "repository": {
     "type": "git",
-    "url": "https://Inian@bitbucket.org/dexterjs/js-proxy.git"
+    "url": "https://github.com/Dexter-JS/JS-Proxy.git"
   },
   "main": "proxy.js",
   "keywords": [
@@ -33,6 +33,6 @@
   },
   "readmeFilename": "README.md",
   "bugs": {
-    "url": "https://bitbucket.org/dexterjs/js-proxy/issues"
+    "url": "https://github.com/Dexter-JS/JS-Proxy/issues"
   }
 }

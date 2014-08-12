@@ -10,7 +10,7 @@ var instrument = function instrument(input, options) {
     var output2 = falafel(input, {
         'range': true
     }, function (node) {
-        options.instrument(node);
+        options.instrument(node, options);
     });
 
     if (options.postprocess) {

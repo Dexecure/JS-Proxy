@@ -51,6 +51,8 @@ function instrument_html(str, options) {
                 return;
             }
             text = text.trim();
+            options.addCustomFunctions = false;
+            options.beautify = false;
             text = instrument.instrument(text, options).toString();
             text = text.substring(prepend.length, text.lastIndexOf("}"));
             $(this).attr(eventAttributes[i], text);
