@@ -25,11 +25,12 @@ function instrument_html(str, options) {
     } else {
         return checking.toString();
     }
-    // $.root().find('body').prepend("<script src='//128.199.221.233/customVarsIni.js'></script><script src='//128.199.221.233/stringIni.js'></script>");
+
     $('script').each(function () {
         var type = $(this).attr('type'),
             jsText = $(this).text(),
             temp = jsText;
+        options.source = "ScriptTag";
         if (type === undefined || type.toLowerCase() === 'text/javascript') {
             temp = instrument.instrument(jsText, options).toString();
         }
@@ -51,8 +52,7 @@ function instrument_html(str, options) {
                 return;
             }
             text = text.trim();
-            options.addCustomFunctions = false;
-            options.beautify = false;
+            options.source = "EventAttribute";
             text = instrument.instrument(text, options).toString();
             text = text.substring(prepend.length, text.lastIndexOf("}"));
             $(this).attr(eventAttributes[i], text);

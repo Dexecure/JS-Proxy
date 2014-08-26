@@ -68,6 +68,7 @@ var start = function (options) {
             res.end = function () {
 
                 var _instrumentJS = function (str, options) {
+                    options.source = "ExternalJS";
                     return instrument.instrument(str, options).toString();
                 };
 
