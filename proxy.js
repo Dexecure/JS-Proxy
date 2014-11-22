@@ -66,13 +66,21 @@ var start = function (options) {
             };
 
             res.end = function () {
+                var userid = url.parse(req.url, true).query.userid;
+                if (query && query.userid) {
+                    userid = query.userid;
+                } else {
+                    userid = "";
+                }
 
                 var _instrumentJS = function (str, options) {
                     options.source = "ExternalJS";
+                    options.userid = userid;
                     return instrument.instrument(str, options).toString();
                 };
 
                 var _instrumentHTML = function (str, options) {
+                    options.userid = userid;
                     return instrument_html.instrument_html(str, options);
                 };
 
