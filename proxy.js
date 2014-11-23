@@ -32,12 +32,35 @@ var start = function (options) {
                 _write = res.write,
                 _end = res.end,
                 processedContent = '';
+            var userid =  "";
+            var urlObj = url.parse(req.url, true);
+            console.log(req.url);
+            var query = urlObj.query;
+            if (query && query.dexid) {
+                userid = query.dexid;
+                urlObj.search = urlObj.search.replace("&dexid=" + userid, "");
+                req.url = url.format(urlObj);
+            }
 
             delete req.headers['accept-encoding'];
+
 
             res.writeHead = function (code) {
                 _code = code.toString();
                 _headers = this._headers;
+
+
+                if(userid && (code == "302" || code == "303")) {
+                    var redirectURL = this.getHeader("Location");
+                    var redirectURLObj = url.parse(redirectURL);
+                    if (!redirectURLObj.search) {
+                        redirectURLObj.search = "";
+                    }
+                    redirectURLObj.search += "&dexid=" + userid;
+                    redirectURL = url.format(redirectURLObj);
+                    this.setHeader("Location", redirectURL);
+                }
+
                 if (this.getHeader('content-type')) {
                     _contentType = this.getHeader('content-type');
                     if (_contentType.match(/javascript/)) {
@@ -66,12 +89,6 @@ var start = function (options) {
             };
 
             res.end = function () {
-                var userid = url.parse(req.url, true).query.userid;
-                if (query && query.userid) {
-                    userid = query.userid;
-                } else {
-                    userid = "";
-                }
 
                 var _instrumentJS = function (str, options) {
                     options.source = "ExternalJS";
