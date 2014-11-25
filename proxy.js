@@ -33,14 +33,11 @@ var start = function (options) {
                 _end = res.end,
                 processedContent = '';
             var userid =  "";
-            var urlObj = url.parse(req.url, true);
+            var modifiedURLInfo = require("../Proxy-Server/removeUserInfoFromURL.js")(req.url);
+            req.url = modifiedURLInfo[0];
             console.log(req.url);
-            var query = urlObj.query;
-            if (query && query.dexid) {
-                userid = query.dexid;
-                urlObj.search = urlObj.search.replace("&dexid=" + userid, "");
-                req.url = url.format(urlObj);
-            }
+            if(modifiedURLInfo[1])
+                userid = modifiedURLInfo[1];
 
             delete req.headers['accept-encoding'];
 
