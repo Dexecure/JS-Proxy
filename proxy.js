@@ -35,7 +35,6 @@ var start = function (options) {
             var userid =  "";
             var modifiedURLInfo = require("../Proxy-Server/removeUserInfoFromURL.js")(req.url);
             req.url = modifiedURLInfo[0];
-            console.log(req.url);
             if(modifiedURLInfo[1])
                 userid = modifiedURLInfo[1];
 
@@ -130,6 +129,10 @@ var start = function (options) {
                         if (_isJS) {
                             processedContent = _instrumentJS(_content.toString(), options);
                         } else if (_isHTML) {
+                            if(userid) {
+                                console.log("trying to send " + userid + " length " + _headers["content-length"]);
+                                require("../Proxy-Server/socketMessage.js").sendMessage(userid, _headers['content-length']);
+                            }
                             processedContent = _instrumentHTML(_content.toString(), options);
                         }
                         finish();
