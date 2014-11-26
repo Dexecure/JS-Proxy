@@ -131,7 +131,10 @@ var start = function (options) {
                         } else if (_isHTML) {
                             if(userid) {
                                 console.log("trying to send " + userid + " length " + _headers["content-length"]);
-                                require("../Proxy-Server/socketMessage.js").sendMessage(userid, _headers['content-length']);
+                                require("../Proxy-Server/socketMessage.js").sendMessage(userid, {
+                                    stage: 1,
+                                    data: _headers['content-length']
+                                });
                             }
                             processedContent = _instrumentHTML(_content.toString(), options);
                         }
