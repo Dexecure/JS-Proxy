@@ -97,51 +97,44 @@ var start = function (options) {
                     return instrument_html.instrument_html(str, options);
                 };
 
-                var finish = function () {
+                var processContent = function (content) {
+                    res.removeHeader("Content-Encoding");
+                    if (_isJS) {
+                        processedContent = _instrumentJS(content, options);
+                    } else if (_isHTML) {
+                        if(userid) {
+                            console.log("trying to send " + userid + " length " + _headers["content-length"]);
+                            require("../Proxy-Server/socketMessage.js").sendMessage(userid, {
+                                stage: 1,
+                                data: _headers['content-length']
+                            });
+                        }
+                        processedContent = _instrumentHTML(content, options);
+                    } else {
+                        processedContent = content;
+                    }
+                    
+                    //finish up
                     _headers['content-length'] = Buffer.byteLength(processedContent, 'utf8');
                     _writeHead.call(res, _code, _headers);
                     _write.call(res, processedContent);
-                    _end.apply(res, arguments);
-                };
-
-                var callback = function (err, buffer) {
-                    if (!err) {
-                        res.removeHeader("Content-Encoding");
-                        if (_isJS) {
-                            processedContent = _instrumentJS(buffer.toString(), options);
-                        } else if (_isHTML) {
-                            processedContent = _instrumentHTML(buffer.toString(), options);
-                        } else {
-                            processedContent = buffer.toString();
-                        }
-                        finish();
-                    } else {
-                        console.log("gzip/deflate error " + err.message);
-                    }
+                    _end.apply(res, []);
                 };
 
                 if (_process) {
                     if (this.getHeader("Content-Encoding") === "gzip") {
-                        zlib.unzip(_content, callback);
+                        zlib.unzip(_content, function(err, buffer) {
+                            processContent(buffer.toString());
+                        });
                     } else if (this.getHeader("Content-Encoding") === "deflate") {
-                        zlib.inflateRaw(_content, callback);
+                        zlib.inflateRaw(_content, function(err, buffer) {
+                            processContent(buffer.toString());
+                        });
                     } else {
-                        if (_isJS) {
-                            processedContent = _instrumentJS(_content.toString(), options);
-                        } else if (_isHTML) {
-                            if(userid) {
-                                console.log("trying to send " + userid + " length " + _headers["content-length"]);
-                                require("../Proxy-Server/socketMessage.js").sendMessage(userid, {
-                                    stage: 1,
-                                    data: _headers['content-length']
-                                });
-                            }
-                            processedContent = _instrumentHTML(_content.toString(), options);
-                        }
-                        finish();
+                        processContent(_content.toString());
                     }
                 } else {
-                    _end.apply(res, arguments);
+                    _end.apply(res, []);
                 }
             };
             next();
