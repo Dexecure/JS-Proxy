@@ -46,7 +46,7 @@ var start = function (options) {
                 _headers = this._headers;
 
 
-                if(userid && (code == "302" || code == "303")) {
+                if(userid && (code == "302" || code == "303" || code == "301")) {
                     var redirectURL = this.getHeader("Location");
                     var redirectURLObj = url.parse(redirectURL);
                     if (!redirectURLObj.search) {
