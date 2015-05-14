@@ -25,15 +25,15 @@ function instrument_html(str, options) {
     } else {
         return checking.toString();
     }
-    var initCode = "<script class='dex-ignore'>";
-    initCode += "function dexreceiveMessage(event) {";
-    initCode += "var data = JSON.parse(event.data);";
-    initCode += "reportXSSIni1(data.sinkValue, data.source, data.sink, data.locationURL, '" + options.userid + "');";
-    initCode += "}";
-    initCode += "window.addEventListener('message', dexreceiveMessage, false);";
-    initCode += "</script>";
+    // var initCode = "<script class='dex-ignore'>";
+    // initCode += "function dexreceiveMessage(event) {";
+    // initCode += "var data = JSON.parse(event.data);";
+    // initCode += "reportXSSIni1(data.sinkValue, data.source, data.sink, data.locationURL, '" + options.userid + "');";
+    // initCode += "}";
+    // initCode += "window.addEventListener('message', dexreceiveMessage, false);";
+    // initCode += "</script>";
 
-    $.root().find('head').prepend(initCode);
+    // $.root().find('head').prepend(initCode);
 
     $('script').each(function () {
         if($(this).hasClass('dex-ignore')) {

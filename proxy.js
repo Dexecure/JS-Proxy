@@ -33,10 +33,10 @@ var start = function (options) {
                 _end = res.end,
                 processedContent = '';
             var userid =  "";
-            var modifiedURLInfo = require("../Proxy-Server/removeUserInfoFromURL.js")(req.url);
-            req.url = modifiedURLInfo[0];
-            if(modifiedURLInfo[1])
-                userid = modifiedURLInfo[1];
+            // var modifiedURLInfo = require("../Proxy-Server/removeUserInfoFromURL.js")(req.url);
+            // req.url = modifiedURLInfo[0];
+            // if(modifiedURLInfo[1])
+                // userid = modifiedURLInfo[1];
 
             delete req.headers['accept-encoding'];
 
@@ -46,16 +46,16 @@ var start = function (options) {
                 _headers = this._headers;
 
 
-                if(userid && (code == "302" || code == "303" || code == "301")) {
-                    var redirectURL = this.getHeader("Location");
-                    var redirectURLObj = url.parse(redirectURL);
-                    if (!redirectURLObj.search) {
-                        redirectURLObj.search = "";
-                    }
-                    redirectURLObj.search += "&dexid=" + userid;
-                    redirectURL = url.format(redirectURLObj);
-                    this.setHeader("Location", redirectURL);
-                }
+                // if(userid && (code == "302" || code == "303" || code == "301")) {
+                //     var redirectURL = this.getHeader("Location");
+                //     var redirectURLObj = url.parse(redirectURL);
+                //     if (!redirectURLObj.search) {
+                //         redirectURLObj.search = "";
+                //     }
+                //     redirectURLObj.search += "&dexid=" + userid;
+                //     redirectURL = url.format(redirectURLObj);
+                //     this.setHeader("Location", redirectURL);
+                // }
 
                 if (this.getHeader('content-type')) {
                     _contentType = this.getHeader('content-type');
@@ -102,12 +102,12 @@ var start = function (options) {
                     if (_isJS) {
                         processedContent = _instrumentJS(content, options);
                     } else if (_isHTML) {
-                        if(userid) {
-                            require("../Proxy-Server/socketMessage.js").sendMessage(userid, {
-                                stage: 1,
-                                data: Buffer.byteLength(content, 'utf8')
-                            });
-                        }
+                    
+                        require("../Proxy-Server/socketMessage.js").sendMessage("dummy", {
+                            stage: 1,
+                            data: Buffer.byteLength(content, 'utf8')
+                        });
+                    
                         processedContent = _instrumentHTML(content, options);
                     } else {
                         processedContent = content;
