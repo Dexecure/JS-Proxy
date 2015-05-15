@@ -33,29 +33,12 @@ var start = function (options) {
                 _end = res.end,
                 processedContent = '';
             var userid =  "";
-            // var modifiedURLInfo = require("../Proxy-Server/removeUserInfoFromURL.js")(req.url);
-            // req.url = modifiedURLInfo[0];
-            // if(modifiedURLInfo[1])
-                // userid = modifiedURLInfo[1];
 
             delete req.headers['accept-encoding'];
-
 
             res.writeHead = function (code) {
                 _code = code.toString();
                 _headers = this._headers;
-
-
-                // if(userid && (code == "302" || code == "303" || code == "301")) {
-                //     var redirectURL = this.getHeader("Location");
-                //     var redirectURLObj = url.parse(redirectURL);
-                //     if (!redirectURLObj.search) {
-                //         redirectURLObj.search = "";
-                //     }
-                //     redirectURLObj.search += "&dexid=" + userid;
-                //     redirectURL = url.format(redirectURLObj);
-                //     this.setHeader("Location", redirectURL);
-                // }
 
                 if (this.getHeader('content-type')) {
                     _contentType = this.getHeader('content-type');
