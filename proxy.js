@@ -85,13 +85,6 @@ var start = function (options) {
                     if (_isJS) {
                         processedContent = _instrumentJS(content, options);
                     } else if (_isHTML) {
-                        
-                        var testId = require("fs").readFileSync("../logs/testId.txt") + "";
-                        require("../Proxy-Server/socketMessage.js").sendMessage(testId, {
-                            stage: 1,
-                            data: Buffer.byteLength(content, 'utf8')
-                        });
-                    
                         processedContent = _instrumentHTML(content, options);
                     } else {
                         processedContent = content;
