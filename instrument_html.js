@@ -14,16 +14,11 @@ function instrument_html(str, options) {
     } catch (ignore) {
 
     }
-    //second checking if its JS
-    var checking = instrument.instrument(str).toString(),
-        $;
-    if (checking === str) {
-        $ = cheerio.load(str, {
-            xmlMode: false,
-            recognizeCDATA: true
-        });
-    } else {
-        return checking.toString();
+    //second checking and returning if its JS
+    try {
+       require("falafel-turbo/node_modules/esprima").parse(str);
+    } catch (err) {
+        return str;
     }
 
     $('script').each(function () {
