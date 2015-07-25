@@ -15,7 +15,7 @@ function instrument_html(str, options) {
 
     }
     //second checking if its JS
-    var checking = instrument.instrument(str, options).toString(),
+    var checking = instrument.instrument(str).toString(),
         $;
     if (checking === str) {
         $ = cheerio.load(str, {
