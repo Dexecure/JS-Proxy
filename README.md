@@ -4,13 +4,13 @@ A multithreaded man-in-the-middle proxy which captures JavaScript on the fly and
 
 ##Installation
 ```
-npm install js-proxy
+npm install node-js-proxy
 ```
 
 The callback function is called for each node returned by [falafel](https://github.com/substack/node-falafel)
 
 ``` js
-var proxy = require('js-proxy');
+var proxy = require('node-js-proxy');
 
 var options = {};
 options.port = 9003;
