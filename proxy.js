@@ -8,7 +8,8 @@ var start = function (options) {
         zlib = require('zlib'),
         port = parseInt(options.port, 10),
         cluster = require('cluster'),
-        threads = parseInt(options.threads, 10);
+        threads = parseInt(options.threads, 10),
+        iconv = require("iconv-lite");
 
     if (!threads) {
         threads = 1;
@@ -96,18 +97,27 @@ var start = function (options) {
                     _write.call(res, processedContent);
                     _end.apply(res, []);
                 };
+                var bufferToString = function (buffer) {
+                    // console.log(buffer[0].toString(16), buffer[1].toString(16));
+                    if(buffer.length > 2 && buffer[0] == 0xFF && buffer[1] == 0xFE) {
+                        return iconv.decode(buffer, "utf16-le");
+                    } else {
+                        // assume it is utf-8
+                        return iconv.decode(buffer, "utf8");
+                    }
+                }
 
                 if (_process) {
                     if (this.getHeader("Content-Encoding") === "gzip") {
                         zlib.unzip(_content, function(err, buffer) {
-                            processContent(buffer.toString());
+                            processContent(bufferToString(buffer));
                         });
                     } else if (this.getHeader("Content-Encoding") === "deflate") {
                         zlib.inflateRaw(_content, function(err, buffer) {
-                            processContent(buffer.toString());
+                            processContent(bufferToString(buffer));
                         });
                     } else {
-                        processContent(_content.toString());
+                        processContent(bufferToString(_content));
                     }
                 } else {
                     _end.apply(res, []);

@@ -18,9 +18,10 @@
     "test": "test"
   },
   "dependencies": {
-    "http-proxy": "0.10.4",
+    "cheerio": "*",
     "falafel-turbo": "*",
-    "cheerio": "*"
+    "http-proxy": "0.10.4",
+    "iconv-lite": "^0.4.11"
   },
   "engines": {
     "node": ">=0.10.0"
