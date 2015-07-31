@@ -21,6 +21,11 @@ function instrument_html(str, options) {
         return str;
     }
 
+    var $ = cheerio.load(str, {
+        xmlMode: false,
+        recognizeCDATA: true
+    });
+    
     $('script').each(function () {
         if($(this).hasClass('dex-ignore')) {
             return;
