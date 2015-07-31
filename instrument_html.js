@@ -17,15 +17,16 @@ function instrument_html(str, options) {
     //second checking and returning if its JS
     try {
        require("falafel-turbo/node_modules/esprima").parse(str);
+       return str;
     } catch (err) {
-        return str;
+
     }
 
     var $ = cheerio.load(str, {
         xmlMode: false,
         recognizeCDATA: true
     });
-    
+
     $('script').each(function () {
         if($(this).hasClass('dex-ignore')) {
             return;
