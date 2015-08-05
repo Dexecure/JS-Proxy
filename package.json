@@ -1,7 +1,7 @@
 {
   "name": "node-js-proxy",
   "description": "A multithreaded man-in-the-middle proxy to extract JavaScript from websites and modify it on the fly",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "homepage": "https://github.com/Dexter-JS/JS-Proxy",
   "repository": {
     "type": "git",
