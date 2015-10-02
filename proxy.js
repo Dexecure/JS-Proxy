@@ -51,9 +51,7 @@ var start = function (options) {
                 }
                 if (_isHTML || _isJS) {
                     _process = true;
-                    var headerBuffer = new Buffer(_headers);
-                    _content = new Buffer(headerBuffer.length);
-                    headerBuffer.copy(_content);
+                    _content = new Buffer(0);
                 }
                 if (!_process) {
                     _writeHead.apply(res, arguments);
