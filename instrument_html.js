@@ -27,7 +27,7 @@ function instrument_html(str, options) {
         recognizeCDATA: true
     });
 
-    $('script').each(function () {
+    $('script').each(function (index) {
         if($(this).hasClass('dex-ignore')) {
             return;
         }
@@ -35,6 +35,7 @@ function instrument_html(str, options) {
             jsText = $(this).text(),
             temp = jsText;
         options.source = "ScriptTag";
+        options.origin.scriptNum = index;
         if (type === undefined || type.toLowerCase() === 'text/javascript') {
             temp = instrument.instrument(jsText, options).toString();
         }

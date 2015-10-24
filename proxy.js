@@ -69,10 +69,15 @@ var start = function (options) {
 
                 var _instrumentJS = function (str, options) {
                     options.source = "ExternalJS";
+                    options.origin = {};
+                    options.origin.file = req.url;
                     return instrument.instrument(str, options).toString();
                 };
 
                 var _instrumentHTML = function (str, options) {
+                    options.origin = {
+                        file: req.url
+                    }
                     return instrument_html.instrument_html(str, options);
                 };
 
