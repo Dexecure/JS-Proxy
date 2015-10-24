@@ -33,7 +33,6 @@ var start = function (options) {
                 _write = res.write,
                 _end = res.end,
                 processedContent = '';
-            var userid =  "";
 
             delete req.headers['accept-encoding'];
 
@@ -70,12 +69,10 @@ var start = function (options) {
 
                 var _instrumentJS = function (str, options) {
                     options.source = "ExternalJS";
-                    options.userid = userid;
                     return instrument.instrument(str, options).toString();
                 };
 
                 var _instrumentHTML = function (str, options) {
-                    options.userid = userid;
                     return instrument_html.instrument_html(str, options);
                 };
 
