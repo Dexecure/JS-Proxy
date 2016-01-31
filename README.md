@@ -7,7 +7,7 @@ A multithreaded man-in-the-middle proxy which captures JavaScript on the fly and
 npm install node-js-proxy
 ```
 
-The callback function is called for each node returned by [falafel](https://github.com/substack/node-falafel)
+The callback function is called for each node returned by a modified fork of [falafel](https://github.com/substack/node-falafel). (The node returned has a few extra attributes)
 
 ``` js
 var proxy = require('node-js-proxy');
